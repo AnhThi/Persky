@@ -1,0 +1,106 @@
+    @media only screen and (min-width : 320px) {
+        #div_fixed-bottom{
+            font-size: 10px;
+        }
+        #def_baivietmoi, #def_mautranmoi, #def_vattumoi, #def_duantieubieu{
+            font-size: 15px;
+        }
+    }
+
+    @media only screen and (min-width : 480px) {
+        #div_fixed-bottom{
+            font-size: 12px;
+        }  
+        #def_baivietmoi, #def_mautranmoi, #def_vattumoi, #def_duantieubieu{
+            font-size: 18px;
+        }
+    }
+
+    @media only screen and (min-width : 768px) {
+        #div_fixed-bottom{
+            font-size: 13px;
+        }
+        #def_baivietmoi, #def_mautranmoi, #def_vattumoi, #def_duantieubieu{
+            font-size: 20px;
+        } 
+    }
+
+    @media only screen and (min-width : 992px) {
+        #div_fixed-bottom{
+            font-size: 14px;
+        }
+        #def_baivietmoi, #def_mautranmoi, #def_vattumoi, #def_duantieubieu{
+            font-size: 25px;
+        }
+    }
+
+    @media only screen and (min-width : 1200px) {
+        #div_fixed-bottom{
+            font-size: 14px;
+        }
+        #def_baivietmoi, #def_mautranmoi, #def_vattumoi, #def_duantieubieu{
+            font-size: 28px;
+        }
+    }
+
+@font-face{
+    font-family: 'self_futara';
+    src: url('../fonts/VNF-Futura Regular.ttf');
+}
+
+@font-face{
+    font-family: 'self_novecent';
+    src: url('../fonts/iCielNovecentosans-Normal.otf');
+}
+
+*{
+    margin: 0px;
+    padding: 0px;
+}
+
+a, span, small, p, h1, h2, h3, h4{
+    font-family: self_futara;
+}
+
+h4{
+    font-family: self_novecent;
+}
+
+#div_menu ul li a{
+    font-family: self_novecent;
+}
+
+#div_menu ul li ul li a{
+    font-family: self_futara;
+}
+
+#div_guiyeucau small{
+    padding: 0px 10px;
+    font-size: 16px;
+    border: 3px solid #db1919;
+    border-radius: 12px;
+    transition: 0.2s ease 0s;
+}
+
+#div_guiyeucau small:hover{
+    font-size: 16px;
+    border: 0px;
+    background-color: #262626;
+    color: #ffffff;
+    transition-duration: 0.2s;
+}
+
+#panel-wrapper ul li a{
+    font-family: self_futara;
+    font-size: 15px;
+    font-weight:600;
+    color: #171717;
+}
+
+#div_hoten, #div_sdt, #div_sdt, #div_diachi, #div_email, #div_content{
+    margin-bottom: 10px;
+}
+
+p{
+    background-color: transparent !important;
+}
