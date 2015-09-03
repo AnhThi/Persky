@@ -179,13 +179,14 @@
                                                 </asp:GridView>
                                             </div>
                                         </div>
-
                                     </div><!-- end panel-body -->
                                 </div>
                             </ContentTemplate>
                             <Triggers>
                                 <asp:AsyncPostBackTrigger ControlID="grv_chuaduyet" EventName="RowDeleting" />
                                 <asp:AsyncPostBackTrigger ControlID="grv_chuaduyet" EventName="RowEditing" />
+                                <asp:AsyncPostBackTrigger ControlID="grv_choxuli" EventName="RowDeleting" />
+                                <asp:AsyncPostBackTrigger ControlID="grv_daduyet" EventName="RowDeleting" />
                             </Triggers>
                         </asp:UpdatePanel>
                     </div><!-- end tab yeu cau -->
@@ -330,25 +331,52 @@
                                     <asp:Button ID="btn_themmautran" CssClass="btn btn-primary center-block" Text="Thêm mẫu trần" runat="server" OnClick="btn_themmautran_Click" />
                                 </div>
                                 <div class="col-xs-6 col-sm-6 col-md-6 col-lg-6">
-                                    <div class="panel panel-default">
-                                        <div class="panel-heading">
-                                            <asp:Button ID="btn_hienthianhmautran" CssClass="btn btn-default center-block" Text="Hiện ảnh" runat="server" OnClick="btn_hienthianhmautran_Click" />
-                                        </div><!-- end panel-heading -->
-                                        <div class="panel-body">
-                                            <asp:DataList ID="dtl_anhmautran" runat="server" RepeatColumns="5" CssClass="table" >
-                                                <ItemTemplate>
-                                                    <asp:Image ID="img_anhbaiviet" CssClass="thumbnail" runat="server" Height="75px" Width="75px" ImageUrl='<%# Eval("link") %>' />
-                                                    <span class="badge" style="margin-left: 29px;"><%# Eval("num") %></span>
-                                                </ItemTemplate>
-                                            </asp:DataList>
-                                        </div><!-- end panel_body -->
-                                        <div class="panel-footer">
-                                            <span style="font-weight: bold;">Ảnh đại diện: </span>
-                                            <asp:DropDownList ID="ddl_anhdaidienmautran" runat="server" CssClass="dropdown">
-                                            </asp:DropDownList>
-                                        </div><!-- end panel-footer -->
-                                    </div>
+                                    <asp:UpdatePanel runat="server">
+                                        <ContentTemplate>
+                                            <div class="panel panel-default">
+                                                <div class="panel-heading">
+                                                    <asp:Button ID="btn_hienthianhmautran" CssClass="btn btn-default center-block" Text="Hiện ảnh" runat="server" OnClick="btn_hienthianhmautran_Click" />
+                                                </div><!-- end panel-heading -->
+                                                <div class="panel-body">
+                                                    <asp:DataList ID="dtl_anhmautran" runat="server" RepeatColumns="5" CssClass="table" >
+                                                        <ItemTemplate>
+                                                            <asp:Image ID="img_anhbaiviet" CssClass="thumbnail" runat="server" Height="75px" Width="75px" ImageUrl='<%# Eval("link") %>' />
+                                                            <span class="badge" style="margin-left: 29px;"><%# Eval("num") %></span>
+                                                        </ItemTemplate>
+                                                    </asp:DataList>
+                                                </div><!-- end panel_body -->
+                                                <div class="panel-footer">
+                                                    <span style="font-weight: bold;">Ảnh đại diện: </span>
+                                                    <asp:DropDownList ID="ddl_anhdaidienmautran" runat="server" CssClass="dropdown">
+                                                    </asp:DropDownList>
+                                                </div><!-- end panel-footer -->
+                                            </div>
+                                        </ContentTemplate>
+                                        <Triggers>
+                                            <asp:AsyncPostBackTrigger ControlID="btn_hienthianhmautran" EventName="Click" />
+                                        </Triggers>
+                                    </asp:UpdatePanel>
                                 </div>
+                            </div>
+                        </div>
+                        <div class="panel panel-default">
+                            <div class="panel-heading" style="background-color: #222222;">
+                                <p style="font-size: 20px; font-weight: bold; color: #279cf3;">Quản lí mẫu trần</p>
+                            </div>
+                            <div class="panel-body">
+                                <asp:DataList ID="dtl_dsmautran" runat="server" RepeatColumns="7" CssClass="table" DataKeyField="mamathang" OnDeleteCommand="dtl_dsmautran_DeleteCommand">
+                                    <ItemTemplate>
+                                        <div style="width: 150px; overflow-x: hidden; overflow-y: hidden;">                   
+                                            <a href="<%# "../hienthimautran.aspx?ceilingID=" + Eval("mamathang") %>" target="_blank" data-toggle="tooltip" title="<%# Eval("tenmathang") %>">
+                                                <img class="thumbnail" alt="" src="<%# Eval("anhdaidien") %>" width="150" height="110" />
+                                            </a>                                      
+                                            <small style="font-size: 10px; text-align: center;"><%# Eval("ngaydang") %></small>
+                                            <p id="lbl_tenmathang" style="font-size: 13px; font-weight: bold;"><%# Eval("tenmathang") %></p>
+                                            <p id="lbl_danhmuc" style="width: 600px; font-family: self_novecent; font-size: 13px;"><%# Eval("tendanhmuc") %></p>
+                                            <asp:Button OnClientClick="return confirm('Bạn muốn xóa mẫu trần này ?')" CssClass="btn btn-danger btn-sm" ID="btn_xoamautran" CommandName="Delete" CommandArgument='<%# Eval("mamathang") %>' Text="Xóa" runat="server" />
+                                        </div>
+                                    </ItemTemplate>
+                                </asp:DataList>
                             </div>
                         </div>
                     </div><!-- end tab mau tran -->
@@ -415,26 +443,53 @@
                                             </Adapters>
                                         </fjx:FileUploader> 
                                         <div class="panel panel-default">
-                                            <div class="panel-heading">
-                                                <asp:Button ID="btn_hienanhvattu" CssClass="btn btn-default center-block" Text="Hiện ảnh" runat="server" OnClick="btn_hienanhvattu_Click" />
-                                            </div><!-- end panel-heading -->
-                                            <div class="panel-body">
-                                                <asp:DataList ID="dtl_anhvattu" runat="server" RepeatColumns="4" CssClass="table" >
-                                                    <ItemTemplate>
-                                                        <asp:Image ID="img_anhbaiviet" CssClass="thumbnail" runat="server" Height="75px" Width="75px" ImageUrl='<%# Eval("link") %>' />
-                                                        <span class="badge" style="margin-left: 29px;"><%# Eval("num") %></span>
-                                                    </ItemTemplate>
-                                                </asp:DataList>
-                                            </div><!-- end panel_body -->
-                                            <div class="panel-footer">
-                                                <span style="font-weight: bold;">Ảnh đại diện: </span>
-                                                <asp:DropDownList ID="ddl_anhdaidienvattu" runat="server" CssClass="dropdown">
-                                                </asp:DropDownList>
-                                            </div><!-- end panel-footer -->
+                                            <asp:UpdatePanel runat="server">
+                                                <ContentTemplate>
+                                                     <div class="panel-heading">
+                                                        <asp:Button ID="btn_hienanhvattu" CssClass="btn btn-default center-block" Text="Hiện ảnh" runat="server" OnClick="btn_hienanhvattu_Click" />
+                                                    </div><!-- end panel-heading -->
+                                                    <div class="panel-body">
+                                                        <asp:DataList ID="dtl_anhvattu" runat="server" RepeatColumns="4" CssClass="table" >
+                                                            <ItemTemplate>
+                                                                <asp:Image ID="img_anhbaiviet" CssClass="thumbnail" runat="server" Height="75px" Width="75px" ImageUrl='<%# Eval("link") %>' />
+                                                                <span class="badge" style="margin-left: 29px;"><%# Eval("num") %></span>
+                                                            </ItemTemplate>
+                                                        </asp:DataList>
+                                                    </div><!-- end panel_body -->
+                                                    <div class="panel-footer">
+                                                        <span style="font-weight: bold;">Ảnh đại diện: </span>
+                                                        <asp:DropDownList ID="ddl_anhdaidienvattu" runat="server" CssClass="dropdown">
+                                                        </asp:DropDownList>
+                                                    </div><!-- end panel-footer -->
+                                                </ContentTemplate>
+                                                <Triggers>
+                                                    <asp:AsyncPostBackTrigger ControlID="btn_hienanhvattu" EventName="Click" />
+                                                </Triggers>
+                                            </asp:UpdatePanel>
                                         </div>
                                     </div>
                                 </div>
                             </div><!-- end panel-body -->
+                        </div>
+                        <div class="panel panel-default">
+                            <div class="panel-heading" style="background-color: #222222;">
+                                <p style="font-size: 20px; font-weight: bold; color: #279cf3;">Quản lí vật tư</p>
+                            </div>
+                            <div class="panel-body">
+                                <asp:DataList ID="dtl_dsvattu" runat="server" RepeatColumns="7" CssClass="table" DataKeyField="mamathang" OnDeleteCommand="dtl_dsvattu_DeleteCommand">
+                                    <ItemTemplate>
+                                        <div style="width: 150px; overflow-x: hidden; overflow-y: hidden;">                   
+                                            <a href="<%# "../hienthimautran.aspx?ceilingID=" + Eval("mamathang") %>" target="_blank" data-toggle="tooltip" title="<%# Eval("tenmathang") %>">
+                                                <img class="thumbnail" alt="" src="<%# Eval("anhdaidien") %>" width="150" height="110" />
+                                            </a>                                      
+                                            <small style="font-size: 10px; text-align: center;"><%# Eval("ngaydang") %></small>
+                                            <p id="lbl_tenmathang" style="font-size: 13px; font-weight: bold;"><%# Eval("tenmathang") %></p>
+                                            <p id="lbl_danhmuc" style="width: 600px; font-family: self_novecent; font-size: 13px;"><%# Eval("tendanhmuc") %></p>
+                                            <asp:Button OnClientClick="return confirm('Bạn muốn xóa vật tư này ?')" CssClass="btn btn-danger btn-sm" ID="btn_xoamautran" CommandName="Delete" CommandArgument='<%# Eval("mamathang") %>' Text="Xóa" runat="server" />
+                                        </div>
+                                    </ItemTemplate>
+                                </asp:DataList>
+                            </div>
                         </div>
                     </div><!-- end tab vat tu -->
 <!------------------------------------------ KHÁCH HÀNG ---------------------------------------------------------------------->
@@ -445,42 +500,51 @@
                                 <p style="font-size: 20px; font-weight: bold; color: #279cf3;">Thêm khách hàng</p>
                             </div>
                             <div class="panel-body">
-                                <table class="table">
-                                    <tr>
-                                        <td style="width: 150px; font-weight: bold;"><p>Mã khách hàng(*)</p></td>
-                                        <td>
-                                            <input disabled="disabled" id="txt_makhachhang" type="text" runat="server" class="form-control" style="width: 400px;" />
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td><p style="font-weight: bold;">Tên khách hàng (*)</p></td>
-                                        <td>
-                                            <input id="txt_tenkhachhang" type="text" runat="server" class="form-control" style="width: 400px;" />
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td><p style="font-weight: bold;">Số điện thoại (*)</p></td>
-                                        <td>
-                                            <input id="txt_sdtkhachhang" type="text" runat="server" class="form-control" style="width: 400px;" />
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td><p style="font-weight: bold;">Email</p></td>
-                                        <td>
-                                            <input id="txt_emailkhachhang" type="text" runat="server" class="form-control" style="width: 400px;" />
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td><p style="font-weight: bold;">Địa chỉ (*)</p></td>
-                                        <td>
-                                            <input id="txt_diachikhachhang" type="text" runat="server" class="form-control" style="width: 400px;" />
-                                        </td>
-                                    </tr>
-                                </table>
-                                <div class="row">
+                                <div class="col-xs-6">
+                                    <table class="table">
+                                        <tr>
+                                            <td style="width: 150px; font-weight: bold;"><p>Mã khách hàng(*)</p></td>
+                                            <td>
+                                                <input disabled="disabled" id="txt_makhachhang" type="text" runat="server" class="form-control" style="width: 400px;" />
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td><p style="font-weight: bold;">Tên khách hàng (*)</p></td>
+                                            <td>
+                                                <input id="txt_tenkhachhang" type="text" runat="server" class="form-control" style="width: 400px;" />
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td><p style="font-weight: bold;">Số điện thoại (*)</p></td>
+                                            <td>
+                                                <input id="txt_sdtkhachhang" type="text" runat="server" class="form-control" style="width: 400px;" />
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td><p style="font-weight: bold;">Email</p></td>
+                                            <td>
+                                                <input id="txt_emailkhachhang" type="text" runat="server" class="form-control" style="width: 400px;" />
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td><p style="font-weight: bold;">Địa chỉ (*)</p></td>
+                                            <td>
+                                                <input id="txt_diachikhachhang" type="text" runat="server" class="form-control" style="width: 400px;" />
+                                            </td>
+                                        </tr>
+                                    </table>
                                     <asp:Button ID="btn_themkhachhang" CssClass="btn btn-primary center-block" Text="Thêm khách hàng" runat="server" OnClick="btn_themkhachhang_Click" />
-                                </div>                            
+                                </div>                        
                             </div><!-- end panel-body -->
+                        </div>
+                        <div class="panel panel-default">
+                            <div class="panel-heading" style="background-color: #222222;">
+                                <p style="font-size: 20px; font-weight: bold; color: #279cf3;">Quản lí khách hàng</p>
+                            </div>
+                            <div class="panel-body">
+                                <asp:GridView ID="grv_dskhachhang" CssClass="table table-hover" runat="server">
+                                </asp:GridView>
+                            </div>
                         </div>
                     </div><!-- end tab vat tu -->
 <!------------------------------------------ DỰ ÁN ---------------------------------------------------------------------->
@@ -491,7 +555,7 @@
                                 <p style="font-size: 20px; font-weight: bold; color: #279cf3;">Cập nhật bộ ảnh dự án</p>
                             </div>
                             <div class="panel-body">
-                                <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+                                <div class="col-xs-6 col-sm-6 col-md-6 col-lg-6">
                                     <table class="table">
                                         <tr>
                                             <td><p style="font-weight: bold;">Mã dự án (*)</p></td>
@@ -515,13 +579,13 @@
                                         <tr>
                                             <td style="width: 180px;"><p style="font-weight: bold;">Ngày khởi công (*)</p></td>
                                             <td>
-                                                <input id="txt_ngaykhoicongduan" type="text" runat="server" class="form-control" style="width: 400px;" />
+                                                <input id="txt_ngaykhoicongduan" type="date" runat="server" class="form-control" style="width: 400px;" />
                                             </td>
                                         </tr>
                                         <tr>
                                             <td style="width: 180px;"><p style="font-weight: bold;">Ngày hoàn thành (*)</p></td>
                                             <td>
-                                                <input id="txt_ngayhoanthanhduan" type="text" runat="server" class="form-control" style="width: 400px;" />
+                                                <input id="txt_ngayhoanthanhduan" type="date" runat="server" class="form-control" style="width: 400px;" />
                                             </td>
                                         </tr>
                                         <tr>
@@ -536,26 +600,65 @@
                                                 <input id="txt_diachicongtrinh" type="text" runat="server" class="form-control" style="width: 400px;" />
                                             </td>
                                         </tr>
-                                        <tr>
-                                            <td colspan="2">
-                                                <span style="margin-right: 12px;" class="glyphicon glyphicon-folder-open"></span>
-                                                <span>Thư mục ảnh: </span>
-                                                <span id="lbl_thumucanhduan" runat="server">Thư mục ảnh</span>
-                                            </td>
-                                        </tr>
-                                        <tr>
-                                            <td colspan="2">
-                                                <fjx:FileUploader ID="ful_boanhduan" runat="server" AllowedFileTypes="Web Images (Jpeg, Gig, Png):*.jpg;*.jpeg;*.png;*.gif" RequestAsPostBack="true">
-                                                    <Adapters>
-                                                        <fjx:FileSaverAdapter runat="server" FolderName="~/article" OnFileNameDetermining="ful_boanhduan_FileNameDetermining" />
-                                                    </Adapters>
-                                                </fjx:FileUploader> 
-                                            </td>
-                                        </tr>
                                     </table>
                                     <asp:Button ID="btn_themduan" Text="Thêm dự án" CssClass="btn btn-primary center-block" runat="server" OnClick="btn_themduan_Click" />
                                 </div>
-                                <div class="col-xs-6 col-sm-6 col-md-6 col-lg-6"></div>
+                                <div class="col-xs-6 col-sm-6 col-md-6 col-lg-6">
+                                    <span style="margin-right: 12px;" class="glyphicon glyphicon-folder-open"></span>
+                                    <span>Thư mục ảnh: </span>
+                                    <span id="lbl_thumucanhduan" runat="server">Thư mục ảnh</span>
+                                    <br />
+                                    <fjx:FileUploader ID="ful_boanhduan" runat="server" AllowedFileTypes="Web Images (Jpeg, Gig, Png):*.jpg;*.jpeg;*.png;*.gif" RequestAsPostBack="true">
+                                        <Adapters>
+                                            <fjx:FileSaverAdapter runat="server" FolderName="~/article" OnFileNameDetermining="ful_boanhduan_FileNameDetermining" />
+                                        </Adapters>
+                                    </fjx:FileUploader>
+                                    <div class="panel panel-default">
+                                        <asp:UpdatePanel runat="server">
+                                            <ContentTemplate>
+                                                    <div class="panel-heading">
+                                                    <asp:Button ID="btn_hienanhduan" CssClass="btn btn-default center-block" Text="Hiện ảnh" runat="server" OnClick="btn_hienanhduan_Click" />
+                                                </div><!-- end panel-heading -->
+                                                <div class="panel-body">
+                                                    <asp:DataList ID="dtl_hienanhduan" runat="server" RepeatColumns="4" CssClass="table" >
+                                                        <ItemTemplate>
+                                                            <asp:Image ID="img_anhbaiviet" CssClass="thumbnail" runat="server" Height="75px" Width="75px" ImageUrl='<%# Eval("link") %>' />
+                                                            <span class="badge" style="margin-left: 29px;"><%# Eval("num") %></span>
+                                                        </ItemTemplate>
+                                                    </asp:DataList>
+                                                </div><!-- end panel_body -->
+                                                <div class="panel-footer">
+                                                    <span style="font-weight: bold;">Ảnh đại diện: </span>
+                                                    <asp:DropDownList ID="ddl_hienanhdaidienduan" runat="server" CssClass="dropdown">
+                                                    </asp:DropDownList>
+                                                </div><!-- end panel-footer -->
+                                            </ContentTemplate>
+                                            <Triggers>
+                                                <asp:AsyncPostBackTrigger ControlID="btn_hienanhduan" EventName="Click" />
+                                            </Triggers>
+                                        </asp:UpdatePanel>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="panel panel-default">
+                            <div class="panel-heading" style="background-color: #222222;">
+                                <p style="font-size: 20px; font-weight: bold; color: #279cf3;">Quản lí dự án</p>
+                            </div>
+                            <div class="panel-body">
+                                <asp:DataList ID="dtl_dsduan" runat="server" RepeatColumns="7" CssClass="table" DataKeyField="maduan" OnDeleteCommand="dtl_dsduan_DeleteCommand">
+                                    <ItemTemplate>
+                                        <div style="width: 150px; overflow-x: hidden; overflow-y: hidden;">                   
+                                            <a href="<%# "../hienthiduan.aspx?projectID=" + Eval("maduan") %>" target="_blank" data-toggle="tooltip" title="<%# Eval("tenduan") %>">
+                                                <span style="font-size: 28px; margin-right: 7px;" class="glyphicon glyphicon-home"></span>
+                                            </a>                                      
+                                            <p style="font-size: 13px; font-weight: bold;"><%# Eval("tenduan") %></p>
+                                            <p id="lbl_tenmathang" style="font-size: 10px;"><%# Eval("ngayhoanthanh") %></p>
+                                            <p id="lbl_danhmuc" style="width: 600px; font-size: 10px;"><%# Eval("dientich") %> m<sup>2</sup></p>
+                                            <asp:Button OnClientClick="return confirm('Bạn muốn xóa dự án này ?')" CssClass="btn btn-danger btn-sm" ID="btn_xoaduan" CommandName="Delete" CommandArgument='<%# Eval("maduan") %>' Text="Xóa" runat="server" />
+                                        </div>
+                                    </ItemTemplate>
+                                </asp:DataList>
                             </div>
                         </div>
                     </div><!-- end tab quan li file -->

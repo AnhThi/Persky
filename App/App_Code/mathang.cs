@@ -219,6 +219,60 @@ public class mathang_Action
         return dt;
     }
 
+    public static DataTable getFull_Mautran()
+    {
+        DataTable dt = new DataTable();
+        SqlCommand cmd = new SqlCommand("sp_getFull_Mautran", cnn);
+        cmd.CommandType = CommandType.StoredProcedure;
+        cnn.Open();
+        SqlTransaction trans = cnn.BeginTransaction("getFull_Mautran");
+        try
+        {
+            cmd.Transaction = trans;
+            dt.Load(cmd.ExecuteReader());
+            trans.Commit();
+        }
+        catch (Exception)
+        {
+            trans.Rollback();
+        }
+        finally
+        {
+            if (cnn.State != ConnectionState.Closed)
+            {
+                cnn.Close();
+            }
+        }
+        return dt;
+    }
+
+    public static DataTable getFull_Vattu()
+    {
+        DataTable dt = new DataTable();
+        SqlCommand cmd = new SqlCommand("sp_getFull_Vattu", cnn);
+        cmd.CommandType = CommandType.StoredProcedure;
+        cnn.Open();
+        SqlTransaction trans = cnn.BeginTransaction("getFull_Vattu");
+        try
+        {
+            cmd.Transaction = trans;
+            dt.Load(cmd.ExecuteReader());
+            trans.Commit();
+        }
+        catch (Exception)
+        {
+            trans.Rollback();
+        }
+        finally
+        {
+            if (cnn.State != ConnectionState.Closed)
+            {
+                cnn.Close();
+            }
+        }
+        return dt;
+    }
+
     public static DataTable getAll_Vattu()
     {
         DataTable dt = new DataTable();
@@ -244,5 +298,35 @@ public class mathang_Action
             }
         }
         return dt;
+    }
+
+    public static bool delete_Mathang(mathang mh)
+    {
+        bool success = false;
+        SqlCommand cmd = new SqlCommand("sp_delete_Mathang", cnn);
+        cmd.CommandType = CommandType.StoredProcedure;
+        cmd.Parameters.AddWithValue("@mamathang", mh.mamathang);
+        cnn.Open();
+        SqlTransaction trans = cnn.BeginTransaction("delete_Mathang");
+        try
+        {
+            cmd.Transaction = trans;
+            cmd.ExecuteNonQuery();
+            trans.Commit();
+            success = true;
+        }
+        catch (Exception)
+        {
+            success = false;
+            trans.Rollback();
+        }
+        finally
+        {
+            if (cnn.State != ConnectionState.Closed)
+            {
+                cnn.Close();
+            }
+        }
+        return success;
     }
 }

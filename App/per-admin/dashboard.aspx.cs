@@ -45,6 +45,9 @@ public partial class per_admin_default : System.Web.UI.Page
             ddl_danhmucmautran.DataTextField = "tendanhmuc";
             ddl_danhmucmautran.DataValueField = "madanhmuc";
             ddl_danhmucmautran.DataBind();
+
+            dtl_dsmautran.DataSource = mathang_Action.getFull_Mautran();
+            dtl_dsmautran.DataBind();
             //----------------- VẬT TƯ --------------------------
 
             txt_mavattu.Value = "VT-" + DateTime.Now.ToString("yyyyMMddhhmmss");
@@ -60,9 +63,15 @@ public partial class per_admin_default : System.Web.UI.Page
             ddl_donvitinhvattu.DataValueField = "madvt";
             ddl_donvitinhvattu.DataBind();
 
+            dtl_dsvattu.DataSource = mathang_Action.getFull_Vattu();
+            dtl_dsvattu.DataBind();
+
             //----------------- KHÁCH HÀNG --------------------------
 
             txt_makhachhang.Value = "KH-" + DateTime.Now.ToString("yyyyMMddhhmmss");
+
+            grv_dskhachhang.DataSource = khachhang_Action.getAll_Khachhang();
+            grv_dskhachhang.DataBind();
 
             //----------------- DỰ ÁN --------------------------
 
@@ -73,6 +82,9 @@ public partial class per_admin_default : System.Web.UI.Page
 
             txt_maduan.Value = "DA-" + DateTime.Now.ToString("yyyyMMddhhmmss");
             lbl_thumucanhduan.InnerText = txt_maduan.Value;
+
+            dtl_dsduan.DataSource = duan_Action.getFull_Duan();
+            dtl_dsduan.DataBind();
 
             //----------------- THẮC MÁC --------------------------
             grv_thacmac.DataSource = thacmac_Action.getAll_Thacmac();
@@ -312,7 +324,6 @@ public partial class per_admin_default : System.Web.UI.Page
         {
             Response.Write("<script>alert('Xóa bài viết thất bại')</script>");
         }
-        Response.Write(Server.MapPath(@"~/article/" + argu[1]));
     }
     protected void dtl_baiviet_EditCommand(object source, DataListCommandEventArgs e)
     {
@@ -346,6 +357,8 @@ public partial class per_admin_default : System.Web.UI.Page
         bool success = mathang_Action.add_Mathang(mh);
         if (success == true)
         {
+            dtl_dsmautran.DataSource = mathang_Action.getFull_Mautran();
+            dtl_dsmautran.DataBind();
             Response.Write("<script>alert('Thêm mẫu trần thành công')</script>");
         }
         else
@@ -381,6 +394,25 @@ public partial class per_admin_default : System.Web.UI.Page
             Response.Write("<script>alert('Ảnh chưa được upload')</script>");
         }
     }
+
+    protected void dtl_dsmautran_DeleteCommand(object source, DataListCommandEventArgs e)
+    {
+        string argu = e.CommandArgument.ToString();
+        mathang mh = new mathang();
+        mh.mamathang = argu;
+        bool success = mathang_Action.delete_Mathang(mh);
+        if (success == true)
+        {
+            Directory.Delete(Server.MapPath(@"~/mautran/" + argu), true);
+
+            Response.Redirect(Request.Url.AbsoluteUri);
+        }
+        else
+        {
+            Response.Write("<script>alert('Xóa mẫu trần thất bại')</script>");
+        }
+    }
+
     #endregion
     //----------------------------------------- VẬT TƯ ----------------------------------------------------------------------
     #region VẬT TƯ
@@ -435,6 +467,8 @@ public partial class per_admin_default : System.Web.UI.Page
         bool success = mathang_Action.add_Mathang(mh);
         if(success == true)
         {
+            dtl_dsvattu.DataSource = mathang_Action.getFull_Vattu();
+            dtl_dsvattu.DataBind();
             Response.Write("<script>alert('Thêm vật tư thành công')</script>");
         }
         else
@@ -442,6 +476,24 @@ public partial class per_admin_default : System.Web.UI.Page
             Response.Write("<script>alert('Thêm vật tư không thành công')</script>");
         }
     }
+
+    protected void dtl_dsvattu_DeleteCommand(object source, DataListCommandEventArgs e)
+    {
+        string argu = e.CommandArgument.ToString();
+        mathang mh = new mathang();
+        mh.mamathang = argu;
+        bool success = mathang_Action.delete_Mathang(mh);
+        if (success == true)
+        {
+            Directory.Delete(Server.MapPath(@"~/vattu/" + argu), true);
+            Response.Redirect(Request.Url.AbsoluteUri);
+        }
+        else
+        {
+            Response.Write("<script>alert('Xóa vật tư thất bại')</script>");
+        }
+    }
+
     #endregion
 
     //----------------------------------------- KHÁCH HÀNG ----------------------------------------------------------------------
@@ -489,6 +541,8 @@ public partial class per_admin_default : System.Web.UI.Page
         bool success = duan_Action.add_Duan(da);
         if (success == true)
         {
+            dtl_dsduan.DataSource = duan_Action.getFull_Duan();
+            dtl_dsduan.DataBind();
             Response.Write("<script>alert('Thêm dự án mới thành công')</script>");
         }
         else
@@ -497,7 +551,53 @@ public partial class per_admin_default : System.Web.UI.Page
         }
     }
 
-//----------------------------------------- THẮC MẮC ----------------------------------------------------------------------
+
+    protected void btn_hienanhduan_Click(object sender, EventArgs e)
+    {
+        try
+        {
+            string[] listFile = Directory.GetFiles(Server.MapPath("~/duan/" + lbl_thumucanhduan.InnerText));
+            DataTable dt = new DataTable();
+            dt.Columns.Add(new DataColumn("num", typeof(int)));
+            dt.Columns.Add(new DataColumn("link", typeof(string)));
+            int num = 1;
+            foreach (string i in listFile)
+            {
+                string pic = Path.GetFileName(i);
+                dt.Rows.Add(num, "../duan/" + lbl_thumucanhduan.InnerText + "/" + pic);
+                num++;
+            }
+            dtl_hienanhduan.DataSource = dt;
+            dtl_hienanhduan.DataBind();
+            ddl_hienanhdaidienduan.DataSource = dt;
+            ddl_hienanhdaidienduan.DataTextField = "num";
+            ddl_hienanhdaidienduan.DataValueField = "link";
+            ddl_hienanhdaidienduan.DataBind();
+        }
+        catch (Exception)
+        {
+            Response.Write("<script>alert('Ảnh chưa được upload')</script>");
+        }
+    }
+
+    protected void dtl_dsduan_DeleteCommand(object source, DataListCommandEventArgs e)
+    {
+        string argu = e.CommandArgument.ToString();
+        duan da = new duan();
+        da.maduan = argu;
+        bool success = duan_Action.delete_Duan(da);
+        if (success == true)
+        {
+            Directory.Delete(Server.MapPath(@"~/duan/" + argu), true);
+            Response.Redirect(Request.Url.AbsoluteUri);
+        }
+        else
+        {
+            Response.Write("<script>alert('Xóa dự án thất bại')</script>");
+        }
+    }
+
+    //----------------------------------------- THẮC MẮC ----------------------------------------------------------------------
     protected void btn_dangnoidungthacmac_Click(object sender, EventArgs e)
     {
         thacmac tm = new thacmac();

@@ -178,9 +178,8 @@
                     </div>
                 </div>                            
             </div><!-- end main container -->
-
-    <!-- --------------------------------- MODAL --------------------------------- -->
-            <div class="modal fade" id="div_boxyeucau" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+    <!-- --------------------------------- MODAL --------------------------------- -->     
+            <div class="modal fade" id="div_boxyeucau" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" style="margin-top: 30px;">
                 <div class="modal-dialog" role="document">
                 <div class="modal-content">
                     <div class="modal-header">
@@ -227,20 +226,14 @@
     </body>
 </html>
 
- <script>
+<script>
     $(document).ready(function () {
         $(window).load(function () {
             //$("#btn_guiyeucau").attr("disabled", "disabled");
         });
-        $("#btn_guiyeucau").mouseenter(function () {
-            var v = grecaptcha.getResponse();
-            if (v.length != 0)
-            {
-                $("#btn_guiyeucau").removeAttr("onclick");
-            }
-        });
     });
 </script>
+
 <script>
     $(document).ready(function () {
         function IsEmail(email) {
@@ -297,6 +290,27 @@
             }
             else {
                 $("#check_yeucau").hide(100);
+            }
+        });
+
+        function YC()
+        {
+            if ($("#check_hoten").is(':visible') || $("#check_sdt").is(':visible') || $("#check_diachi").is(':visible') || $("#check_email").is(':visible') || $("#check_yeucau").is(':visible'))
+            {
+                return false;
+            }
+            else {
+                return true;
+            }
+        }
+        $("#btn_guiyeucau").mouseenter(function () {
+            var v = grecaptcha.getResponse();
+            if (v.length != 0 && YC() == true) {
+                $("#btn_guiyeucau").attr('onclick', 'return true');
+            }
+            else
+            {
+                $("#btn_guiyeucau").attr('onclick', 'return false');
             }
         });
     });

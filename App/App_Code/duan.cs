@@ -155,4 +155,60 @@ public class duan_Action
         }
         return success;
     }
+    public static DataTable getFull_Duan()
+    {
+        DataTable dt = new DataTable();
+        SqlCommand cmd = new SqlCommand("sp_getFull_Duan", cnn);
+        cmd.CommandType = CommandType.StoredProcedure;
+        cnn.Open();
+        SqlTransaction trans = cnn.BeginTransaction("getFull_Duan");
+        try
+        {
+            cmd.Transaction = trans;
+            dt.Load(cmd.ExecuteReader());
+            trans.Commit();
+        }
+        catch (Exception)
+        {
+            trans.Rollback();
+        }
+        finally
+        {
+            if (cnn.State != ConnectionState.Closed)
+            {
+                cnn.Close();
+            }
+        }
+        return dt;
+    }
+
+    public static bool delete_Duan(duan da)
+    {
+        bool success = false;
+        SqlCommand cmd = new SqlCommand("sp_delete_Duan", cnn);
+        cmd.CommandType = CommandType.StoredProcedure;
+        cmd.Parameters.AddWithValue("@maduan", da.maduan);
+        cnn.Open();
+        SqlTransaction trans = cnn.BeginTransaction("delete_Baiviet");
+        try
+        {
+            cmd.Transaction = trans;
+            cmd.ExecuteNonQuery();
+            trans.Commit();
+            success = true;
+        }
+        catch (Exception)
+        {
+            success = false;
+            trans.Rollback();
+        }
+        finally
+        {
+            if (cnn.State != ConnectionState.Closed)
+            {
+                cnn.Close();
+            }
+        }
+        return success;
+    }
 }

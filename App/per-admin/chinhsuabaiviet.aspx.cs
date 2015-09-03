@@ -54,13 +54,13 @@ public partial class per_admin_chinhsuabaiviet : System.Web.UI.Page
     }
     protected void ful_uploadanh_FileNameDetermining(object sender, com.flajaxian.FileNameDeterminingEventArgs e)
     {
-        e.FileName = Server.MapPath("~/article/" + txt_tieude.Value + "/") + e.File.FileName; 
+        e.FileName = Server.MapPath("~/article/" + mabaiviet + "/") + e.File.FileName; 
     }
     protected void btn_refresh_Click(object sender, EventArgs e)
     {
         try
         {
-            string[] listFile = Directory.GetFiles(Server.MapPath("~/article/" + txt_tieude.Value));
+            string[] listFile = Directory.GetFiles(Server.MapPath("~/article/" + mabaiviet));
             DataTable dt_ref = new DataTable();
             dt_ref.Columns.Add(new DataColumn("num", typeof(int)));
             dt_ref.Columns.Add(new DataColumn("link", typeof(string)));
@@ -68,7 +68,7 @@ public partial class per_admin_chinhsuabaiviet : System.Web.UI.Page
             foreach (string i in listFile)
             {
                 string pic = Path.GetFileName(i);
-                dt_ref.Rows.Add(num, "../article/" + txt_tieude.Value + "/" + pic);
+                dt_ref.Rows.Add(num, "../article/" + mabaiviet + "/" + pic);
                 num++;
             }
 
